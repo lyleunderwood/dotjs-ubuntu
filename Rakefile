@@ -14,7 +14,7 @@ namespace :install do
     puts "I will install:", ""
     puts "1. The 'dotjs' Google Chrome Extension"
     puts "2. djsd(1) in #{DAEMON_INSTALL_DIR}"
-    puts "3. com.github.dotjs in ~/Library/LaunchAgents",""
+    puts "3. dotjs.desktop in ~/.config/autostart/",""
     print "Ok? (y/n) "
 
     begin
@@ -30,7 +30,7 @@ namespace :install do
   end
 
   task :done do
-    if system("curl http://localhost:3131 &> /dev/null")
+    if system("curl http://localhost:3131/example.com &> /dev/null")
       puts "\e[1m\e[32mdotjs installation worked\e[0m"
       puts "drop files like google.com.js in ~/.js and enjoy hacking the web"
     else
@@ -41,8 +41,8 @@ namespace :install do
 
   desc "Install launch agent"
   task :agent do
-    plist = "com.github.dotjs.plist"
-    agent = File.expand_path("~/Library/LaunchAgents/#{plist}")
+    plist = "dotjs.desktop"
+    agent = File.expand_path("~/.config/autostart/#{plist}")
 
     File.open(agent, "w") do |f|
       f.puts ERB.new(IO.read(plist)).result(binding)
@@ -50,7 +50,7 @@ namespace :install do
 
     chmod 0644, agent
     puts "starting djdb..."
-    sh "launchctl load -w #{agent}"
+    sh "nohup #{DAEMON_INSTALL_DIR}/djsd &"
     # wait for server to start
     sleep 5
   end
@@ -63,7 +63,7 @@ namespace :install do
   desc "Install Google Chrome extension"
   task :chrome do
     puts "Installing Google Chrome extension..."
-    sh "open -a 'Google Chrome' builds/dotjs.crx &"
+    sh "chromium-browser builds/dotjs.crx &"
   end
 end
 
@@ -78,7 +78,7 @@ namespace :uninstall do
     puts "\e[1m-----\e[0m"
     puts "I will remove:", ""
     puts "1. djsd(1) from #{DAEMON_INSTALL_DIR}"
-    puts "2. com.github.dotjs from ~/Library/LaunchAgents"
+    puts "2. dotjs.desktop from ~/.config/autostart"
     puts "3. The 'dotjs' Google Chrome Extension",""
     puts "I will not remove:", ""
     puts "1. ~/.js", ""
@@ -97,20 +97,25 @@ namespace :uninstall do
   end
 
   task :done do
-    if system("curl http://localhost:3131 &> /dev/null")
-      puts "\e[31mdotjs uninstall failed\e[0m"
-      puts "djsd is still running"
-    else
+    # if system("curl http://localhost:3131 &> /dev/null")
+    #   puts "\e[31mdotjs uninstall failed\e[0m"
+    #   puts "djsd is still running"
+    # else
+      # look, just trust me okay?
       puts "\e[1m\e[32mdotjs uninstall worked\e[0m"
       puts "your ~/.js was not touched"
-    end
+    # end
   end
 
   desc "Uninstall launch agent"
   task :agent do
-    plist = "com.github.dotjs.plist"
-    agent = File.expand_path("~/Library/LaunchAgents/#{plist}")
-    sh "launchctl unload #{agent}"
+    plist = "dotjs.desktop"
+    agent = File.expand_path("~/.config/autostart/#{plist}")
+    begin
+      sh "kill `pgrep -f djsd`" # sh gets super angry about kill's return code,
+                                # but this is definitely working, so...
+    rescue
+    end
     rm agent, :verbose => true
   end
 

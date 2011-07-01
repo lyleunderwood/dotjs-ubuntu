@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Type=Application
+Exec=djsd
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=DotJS
+Name=DotJS
+Comment[en_US]=Server for sending user javascripts to chrome extension.
+Comment=Server for sending user javascripts to chrome extension.

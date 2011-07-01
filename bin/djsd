@@ -13,6 +13,8 @@ end
 
 require 'webrick'
 
+Dir.chdir(File.join(ENV['HOME'], '.js'))
+
 dotjs = Class.new(WEBrick::HTTPServlet::AbstractServlet) do
   def do_GET(request, response)
     file    = File.expand_path("#{request.path.gsub('/','')}")
