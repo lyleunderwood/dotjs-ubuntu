@@ -1,3 +1,5 @@
+Note: This Ubuntu version is currently a bit hacky,
+but it definitely works (for me).
 ..................... dotjs ........................
 
 dotjs  is a  Google Chrome  extension  that executes
@@ -39,10 +41,12 @@ Chrome extensions can't access the local filesystem,
 so dotjs  runs a tiny  web server on port  3131 that
 serves files out of ~/.js.
 
-You don't  have to worry about  starting or stopping
-this web server because  we put a pretty great plist
-into  ~/Library/LaunchAgents that  handles  all that
-for us.
+The Ubuntu version creates a .desktop launcher in
+~/.config/autostart which means the daemon will
+start when the user logs in and stop when the user
+logs out. Implementation as an Upstart script has
+been done but is a bit more complicated. This
+version stays as true to the original as possible.
 
 The dotjs Chrome extension then makes ajax requests
 to http://localhost:3131/convore.com.js any time you
@@ -51,7 +55,7 @@ the returned JavaScript.
 
 ## Requires
 
-- OS X
+- Ubuntu (tested with 11.04)
 - Ruby 1.8
 - rake (gem install rake)
 - Google Chrome
