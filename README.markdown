@@ -64,7 +64,7 @@ the returned JavaScript.
 
 ## Install it
 
-    git clone http://github.com/defunkt/dotjs
+    git clone http://github.com/lyleunderwood/dotjs-ubuntu.git
     cd dotjs
     rake install
 
