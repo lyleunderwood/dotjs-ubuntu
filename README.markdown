@@ -65,7 +65,7 @@ the returned JavaScript.
 ## Install it
 
     git clone http://github.com/lyleunderwood/dotjs-ubuntu.git
-    cd dotjs
+    cd dotjs-ubuntu
     rake install
 
 ## Chromium vs Google Chrome
